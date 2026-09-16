@@ -1,0 +1,35 @@
+<section id="death-chest" class="death-chest-section">
+    <h2>Сундук Смерти</h2>
+    <p class="death-subtitle">Не открывай его... или открой?</p>
+
+    <div class="death-chest-scene">
+        <div class="chest-wrapper" id="chestWrapper">
+            <div class="chest">
+                <div class="chest-lid">
+                    <div class="lid-front"></div>
+                    <div class="lid-top"></div>
+                </div>
+                <div class="chest-body">
+                    <div class="lock">🔒</div>
+                    <div class="chest-glow"></div>
+                </div>
+            </div>
+
+            <!-- Черепа, вылетающие при открытии -->
+            <div class="skull" id="skull1">💀</div>
+            <div class="skull" id="skull2">☠️</div>
+            <div class="skull" id="skull3">💀</div>
+
+            <!-- Дым -->
+            <div class="smoke" id="smoke1"></div>
+            <div class="smoke" id="smoke2"></div>
+            <div class="smoke" id="smoke3"></div>
+
+            <!-- Искры -->
+            <div class="spark" id="spark1">✨</div>
+            <div class="spark" id="spark2">🔥</div>
+        </div>
+
+        <button id="openChestBtn">Открыть сундук</button>
+    </div>
+</section>
