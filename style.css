@@ -1,0 +1,87 @@
+// ===== Сундук Смерти =====
+const chestWrapper = document.getElementById('chestWrapper');
+const chest = chestWrapper?.querySelector('.chest');
+const openChestBtn = document.getElementById('openChestBtn');
+const deathSection = document.getElementById('death-chest');
+
+let isOpen = false;
+
+function openDeathChest() {
+    if (isOpen) return;
+    isOpen = true;
+
+    // Открываем сундук
+    chest.classList.add('open');
+    openChestBtn.disabled = true;
+    openChestBtn.textContent = '💀 ПРОКЛЯТИЕ АКТИВИРОВАНО 💀';
+
+    // Тряска экрана
+    deathSection.classList.add('shaking');
+    setTimeout(() => deathSection.classList.remove('shaking'), 500);
+
+    // Красная вспышка
+    deathSection.classList.add('flash');
+    setTimeout(() => deathSection.classList.remove('flash'), 300);
+
+    // Звук (если поддерживается)
+    playChestSound();
+
+    // Уведомление
+    showToast('💀 Ты открыл сундук смерти...');
+
+    // Сообщения-пугалки
+    const messages = [
+        '☠️ Черепа вылетели!',
+        '🔥 Из сундука вырвалось пламя!',
+        '👻 Призрак появился!',
+        '💀 Проклятие древних активировано!',
+        '🩸 Кровь на стенках сундука...'
+    ];
+
+    let i = 0;
+    const interval = setInterval(() => {
+        if (i >= messages.length) {
+            clearInterval(interval);
+            return;
+        }
+        showToast(messages[i]);
+        i++;
+    }, 1200);
+
+    // Через 8 секунд — "перезагрузка"
+    setTimeout(() => {
+        chest.classList.remove('open');
+        setTimeout(() => {
+            isOpen = false;
+            openChestBtn.disabled = false;
+            openChestBtn.textContent = 'Открыть снова';
+        }, 600);
+    }, 8000);
+}
+
+// Клик по сундуку или кнопке
+chestWrapper?.addEventListener('click', openDeathChest);
+openChestBtn?.addEventListener('click', openDeathChest);
+
+// Простой "звук" через Web Audio API
+function playChestSound() {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(120, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 1);
+
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 1);
+    } catch (e) {
+        // Игнор, если браузер не поддерживает
+    }
+}
